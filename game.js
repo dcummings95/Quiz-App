@@ -63,6 +63,7 @@ let getNewQuestion = () => {
   });
 
   availableQuestions.splice(questionIndex, 1);
+  console.log(availableQuestions);
   acceptingAnswers = true;
 };
 
@@ -73,7 +74,19 @@ choices.forEach(choice => {
     acceptingAnswers = false;
     const selectedChoice = e.target;
     const selectedAnswer = selectedChoice.dataset['number'];
-    getNewQuestion();
+
+    let classToApply = "incorrect";
+      if(selectedAnswer == currentQuestion.answer) {
+        classToApply = "correct";
+      }
+    //Adding a class to the answer
+    selectedChoice.parentElement.classList.add(classToApply);
+    //Use set timout to give a bit of a delay to remove the class
+
+    setTimeout(() => {
+      selectedChoice.parentElement.classList.remove(classToApply);
+      getNewQuestion();
+    }, 1000);
   });
 });
 
