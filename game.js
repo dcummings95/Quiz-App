@@ -42,8 +42,6 @@ fetch(
 
       return formattedQuestion;
     });
-    game.classList.remove("hidden");
-    loader.classList.add("hidden");
     startGame();
   })
   .catch(err => {
@@ -60,6 +58,8 @@ let startGame = () => {
   availableQuestions = [...questions];
   console.log(availableQuestions);
   getNewQuestion();
+  game.classList.remove("hidden");
+  loader.classList.add("hidden");
 };
 
 let getNewQuestion = () => {
