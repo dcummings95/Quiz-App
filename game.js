@@ -12,13 +12,35 @@ let availableQuestions = [];
 
 let questions = [];
 //Promise to get the questions from json file
-fetch("questions.json")
+fetch(
+  "https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple"
+)
   .then(res => {
     return res.json();
   })
   .then(loadedQuestions => {
-    console.log(loadedQuestions);
-    questions = loadedQuestions;
+    console.log(loadedQuestions.results);
+    //use map to fetch api data
+    questions = loadedQuestions.results.map(loadedQuestion => {
+      const formattedQuestion = {
+        question : loadedQuestion.question
+      };
+
+      const answerChoices = [...loadedQuestion.incorrect_answers];
+      formattedQuestion.answer = Math.floor(Math.random() * 3) + 1;
+      answerChoices.splice(
+        formattedQuestion.answer, -1,
+        0, 
+        loadedQuestion.correct_answer
+      );
+      //Iterate through the answer choices, get each choice and their index
+      answerChoices.forEach((choice, index) => {
+        formattedQuestion["choice" + (index + 1)] = choice;
+      });
+
+      return formattedQuestion;
+    });
+    //questions = loadedQuestions;
     startGame();
   })
   .catch(err => {
