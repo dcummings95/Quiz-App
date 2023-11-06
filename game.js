@@ -13,27 +13,33 @@ let questionCounter = 0;
 let availableQuestions = [];
 
 let questions = [];
+
+//Helper function to decode HTML entities
+function decodeHtml(html) {
+  var txt = document.createElement('textarea');
+  txt.innerHTML = html;
+  return txt.value;
+}
+
 //Promise to get the questions from json file
-fetch(
-  "https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple"
-)
+fetch("https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple")
   .then(res => {
     return res.json();
   })
   .then(loadedQuestions => {
     console.log(loadedQuestions.results);
-    //use map to fetch api data
+    //use map to fetch API data
     questions = loadedQuestions.results.map(loadedQuestion => {
       const formattedQuestion = {
-        question : loadedQuestion.question
+        question: decodeHtml(loadedQuestion.question)
       };
 
-      const answerChoices = [...loadedQuestion.incorrect_answers];
+      const answerChoices = loadedQuestion.incorrect_answers.map(answer => decodeHtml(answer));
       formattedQuestion.answer = Math.floor(Math.random() * 3) + 1;
       answerChoices.splice(
-        formattedQuestion.answer, -1,
+        formattedQuestion.answer - 1, //Correct the index when splicing
         0, 
-        loadedQuestion.correct_answer
+        decodeHtml(loadedQuestion.correct_answer)
       );
       //Iterate through the answer choices, get each choice and their index
       answerChoices.forEach((choice, index) => {

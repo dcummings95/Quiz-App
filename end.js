@@ -19,7 +19,7 @@ let saveHighScore = (e) => {
   e.preventDefault();
 
   const score = {
-    score: Math.floor(Math.random() * 100),
+    score: mostRecentScore,
     name: username.value
   };
   //Add score, sort it, then splice to only be top 5
